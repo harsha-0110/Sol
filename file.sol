@@ -1,6 +1,5 @@
-token swap:
+//token swap:
 
-// SPDX-License-Identifier: MIT
 //token_swap.sol
 pragma solidity ^0.8.13;
 
@@ -61,7 +60,7 @@ contract TokenSwap {
 
 
 //Mytoken.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
@@ -75,7 +74,7 @@ contract MyToken is ERC20 {
 ____________________________________________________________________
 
 //ERC721.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 interface IERC165 {
@@ -282,7 +281,7 @@ contract MyNFT is ERC721 {
 _________________________________________________________________________________________
 
 //array.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 contract Array {
@@ -329,7 +328,7 @@ contract Array {
 _______________________________________________________________________________________
 
 //greater_value.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 
 contract Greater_value{
@@ -340,7 +339,7 @@ contract Greater_value{
 }
 _______________________________________________________________________________________
 //Coin.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 contract Coin {
 
@@ -368,7 +367,7 @@ contract Coin {
 }
 _____________________________________________________________________________
 //eth.sol
-// SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.13;
 contract ETH {
 
@@ -397,3 +396,212 @@ contract ETH {
     }
 }
 _______________________________________________________________
+//Etherwallet.sol
+pragma solidity ^0.8.13;
+
+contract EtherWallet {
+    address payable public owner;
+
+    constructor() {
+        owner = payable(msg.sender);
+    }
+
+    receive() external payable {}
+
+    function withdraw(uint _amount) external {
+        require(msg.sender == owner, "caller is not owner");
+        payable(msg.sender).transfer(_amount);
+    }
+
+    function getBalance() external view returns (uint) {
+        return address(this).balance;
+    }
+}
+________________________________________________________________
+//fallback.sol
+pragma solidity ^0.8.13;
+
+contract Fallback {
+    event Log(uint gas);
+
+    // Fallback function must be declared as external.
+    fallback() external payable {
+        // send / transfer (forwards 2300 gas to this fallback function)
+        // call (forwards all of the gas)
+        emit Log(gasleft());
+    }
+
+    // Helper function to check the balance of this contract
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+}
+
+contract SendToFallback {
+    function transferToFallback(address payable _to) public payable {
+        _to.transfer(msg.value);
+    }
+
+    function callFallback(address payable _to) public payable {
+        (bool sent, ) = _to.call{value: msg.value}("");
+        require(sent, "Failed to send Ether");
+    }
+}
+________________________________________________________________________
+
+//inhertance.sol
+
+pragma solidity ^0.8.13;
+
+/* Graph of inheritance
+    A
+   / \
+  B   C
+ / \ /
+F  D,E
+
+*/
+
+contract A {
+    function foo() public pure virtual returns (string memory) {
+        return "A";
+    }
+}
+
+// Contracts inherit other contracts by using the keyword 'is'.
+contract B is A {
+    // Override A.foo()
+    function foo() public pure virtual override returns (string memory) {
+        return "B";
+    }
+}
+
+contract C is A {
+    // Override A.foo()
+    function foo() public pure virtual override returns (string memory) {
+        return "C";
+    }
+}
+
+// Contracts can inherit from multiple parent contracts.
+// When a function is called that is defined multiple times in
+// different contracts, parent contracts are searched from
+// right to left, and in depth-first manner.
+
+contract D is B, C {
+    // D.foo() returns "C"
+    // since C is the right most parent contract with function foo()
+    function foo() public pure override(B, C) returns (string memory) {
+        return super.foo();
+    }
+}
+
+contract E is C, B {
+    // E.foo() returns "B"
+    // since B is the right most parent contract with function foo()
+    function foo() public pure override(C, B) returns (string memory) {
+        return super.foo();
+    }
+}
+
+// Inheritance must be ordered from “most base-like” to “most derived”.
+// Swapping the order of A and B will throw a compilation error.
+contract F is A, B {
+    function foo() public pure override(A, B) returns (string memory) {
+        return super.foo();
+    }
+}
+____________________________________________________________________________
+//crowdfunding.sol
+
+pragma solidity ^0.8.13;
+
+contract CrowdFunding{
+    struct request{
+        string description;
+        uint value;
+        address recipiant;
+        bool complete;
+    }
+    address public manager;
+    uint public MinimumContribution;
+    address[] private approvals;
+
+    function campaign(uint minimum)public{
+        manager = msg.sender;
+        MinimumContribution = minimum;
+    }
+
+    function contribute() public payable{
+        require(msg.value > MinimumContribution);
+        approvals.push(msg.sender);
+    }
+}
+_____________________________________________________________________________
+//call option
+pragma solidity ^0.8.17;
+
+contract CallOption {
+    enum Status {
+        Selling,
+        Occupied,
+        Sold
+    }
+    struct Share {
+        uint256 premium_price;
+        uint256 share_price;
+        Status share_status;
+    }
+
+    address public seller;
+    address public owner;
+    Share public one;
+
+    // Track of Transaction List
+    mapping(address => uint256) list ;
+
+    constructor (){
+        owner = msg.sender ;
+        seller = owner ;
+    }
+
+    modifier onlyOwner (){
+        owner == msg.sender;
+        _;
+    }
+
+    function createShare(uint256 price) external onlyOwner {
+        one = Share (10, price, Status(0));
+    }
+
+    function hold_share_buyer(address buyer) external onlyOwner {
+        uint256 buy = buyer.balance;
+        Share memory temp = one ;
+        require (buy >= temp.premium_price);
+        list [buyer]= buy;
+        Status chk = Status(1);
+        temp.share_status = chk;
+    }
+
+    function after_duration ( address buyer , bool check ) external
+    onlyOwner{
+        Share memory temp = one;
+        if(check){
+            uint256 bal = buyer.balance;
+            require (bal >= temp.share_price);
+            list[buyer]= temp.share_price;
+            Status sts = Status(2);
+            one.share_status = sts;
+            change(buyer);
+        } else {
+            Status sts = Status (0);
+            one.share_status = sts;
+        }
+
+    }
+
+    function change(address _x) public onlyOwner {
+        owner =_x;
+    }
+}
+___________________________________________________________________________
