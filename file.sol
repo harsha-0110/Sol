@@ -366,3 +366,34 @@ contract Coin {
         emit Sent(msg.sender, receiver, amount);
     }
 }
+_____________________________________________________________________________
+//eth.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
+contract ETH {
+
+    address private owner;
+    constructor() {
+        owner=msg.sender;
+    }
+    mapping(address => uint) private eth;
+
+    function addAmount(uint amount) public {
+        eth[msg.sender] += amount;
+    }
+
+    function send(address receiver, uint amount) public {
+        require(amount <= eth[msg.sender], "Insufficient balance."); 
+        eth[msg.sender] -= amount; 
+        eth[receiver] += amount;
+    }
+
+    function withdraw(uint amount) public{
+        eth[owner] -= amount;
+    }
+
+    function getBalance() public view returns(uint256) {
+        return eth[owner];
+    }
+}
+_______________________________________________________________
