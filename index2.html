@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Voting</title>
+    <script type="text/javascript" src="./web3.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="div2">
+        <h1>Voting</h1>
+        <input readonly id ="connectWallet" class="btn" onclick="connectMetamask()" value="CONNECT WALLET" style="position:absolute; top: 20px; right: 15px; width: auto; background-color: red;"/>
+    </div>
+    <div class="div1">
+        <input readonly id="Status" class="btn2" value="STATUS"/> <br> <br>
+        <input readonly class="btn" onclick="returnName()" value="Show Candidates"/> <br> <br>
+        <input type="text" id="inputArea" placeholder="            Enter Canditate ID"> <br> <br>
+        <input readonly class="btn" onclick="vote()" value="Vote"/>
+        </div>
+            <div id="dvTable">
+        </div>
+    </div>
+    <script type="text/javascript" src="./contract.js"></script>
+</body>
+</html>

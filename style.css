@@ -1,0 +1,76 @@
+body {
+    width: auto;
+    height: 780px;
+    background-image: radial-gradient( circle farthest-corner at 22.4% 21.7%, rgba(4,189,228,1) 0%, rgba(2,83,185,1) 100% );
+    text-align: center;
+}
+
+.div1{
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+.div2{
+    margin-top: -10px;
+    margin-left: -8px;
+    background-color: rgb(16, 25, 32);
+    width: 100.9%;
+    height: 100px;
+    border: 1px solid black;
+    color: white;
+}
+
+h1{
+    margin-top: 1%;
+    text-align: center;
+    font-size: 50px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.btn {
+    background-color: rgb(16, 25, 32);
+    color: white;
+    font-size: 33px;
+    width: 450px;
+    height: 50px;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+.btn:hover {
+    background-color: rgb(31, 48, 63);
+}
+
+.btn2 {
+    background-color: rgb(0, 171, 49);
+    color: white;
+    font-size: 33px;
+    width: 450px;
+    height: 50px;
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+input {
+    border-radius: 10px;
+    background-color: white;
+    width: 445px;
+    height: 41px;
+    font-size: 30px;
+}
+
+table {
+    margin-top: 20px;
+    font-size: 30px;
+    border: 1px solid rgb(0, 0, 0);
+    border-collapse: collapse;
+}
+table th, table td {
+    padding: 5px;
+    background-color: white;
+    border-color: rgb(0, 0, 0);
+}
+table th {
+    background-color: rgb(16, 25, 32);
+    color: #ccc;
+    font-weight: bold;
+}
